@@ -13,5 +13,6 @@ Guides, tools and libraries for modern web development.
 - https://modern-web.dev/docs/test-runner/overview/
 - https://modern-web.dev/docs/test-runner/browser-launchers/browserstack/
 - https://modern-web.dev/docs/dev-server/overview/
+- https://modern-web.dev/docs/building/overview/
 - https://github.com/microsoft/playwright
 - https://open-wc.org/guides/

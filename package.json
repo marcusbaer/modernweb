@@ -11,18 +11,28 @@
     "test:playwright": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --playwright --browsers chromium firefox webkit",
     "test:puppeteer": "wtr \"test/**/*.test.{html,js}\" --node-resolve --puppeteer",
     "test:puppeteer:watch": "wtr \"test/**/*.test.{html,js}\" --node-resolve --puppeteer --watch",
-    "test:watch": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --watch"
+    "test:watch": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --watch",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.15.5",
     "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@storybook/addon-actions": "^6.3.8",
+    "@storybook/addon-essentials": "^6.3.8",
+    "@storybook/addon-links": "^6.3.8",
+    "@storybook/web-components": "^6.3.8",
     "@web/dev-server": "^0.1.22",
+    "@web/dev-server-storybook": "^0.3.8",
     "@web/test-runner": "^0.13.17",
     "@web/test-runner-browserstack": "^0.4.2",
     "@web/test-runner-commands": "^0.5.12",
     "@web/test-runner-playwright": "^0.8.8",
-    "@web/test-runner-puppeteer": "^0.10.2"
+    "@web/test-runner-puppeteer": "^0.10.2",
+    "babel-loader": "^8.2.2",
+    "storybook": "^6.3.8"
   },
   "dependencies": {
     "lit-element": "^2.5.1",
