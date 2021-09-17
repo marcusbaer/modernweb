@@ -26,6 +26,7 @@
         import { runTests } from '@web/test-runner-mocha';
         import { expect } from '@esm-bundle/chai';
         import { setViewport } from '@web/test-runner-commands';
+        import { visualDiff } from '@web/test-runner-visual-regression';
         import HappyHippo from '../src/HappyHippo'
 
         let hippoNode;
@@ -65,11 +66,8 @@
                     const border = getComputedStyle(hippoNode).border;
                     expect(border).to.equal('1px solid rgb(128, 128, 128)');
                 });
-                it.skip('allows styling a part message', async () => {
-                    // maybe replace by visual regression test
-                    const messagePart = hippoNode.querySelector('::part(message)');
-                    const backgroundColor = getComputedStyle(messagePart).backgroundColor;
-                    expect(backgroundColor).to.equal('18px');
+                it('allows styling a part message', async () => {
+                    await visualDiff(hippoNode, 'happy-hippo');
                 });
             })
         });

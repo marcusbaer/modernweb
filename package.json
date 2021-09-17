@@ -11,6 +11,7 @@
     "test:playwright": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --playwright --browsers chromium firefox webkit",
     "test:puppeteer": "wtr \"test/**/*.test.{html,js}\" --node-resolve --puppeteer",
     "test:puppeteer:watch": "wtr \"test/**/*.test.{html,js}\" --node-resolve --puppeteer --watch",
+    "test:update-baseline": "web-test-runner test/**/*.test.html --node-resolve --update-visual-baseline",
     "test:watch": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -31,6 +32,7 @@
     "@web/test-runner-commands": "^0.5.12",
     "@web/test-runner-playwright": "^0.8.8",
     "@web/test-runner-puppeteer": "^0.10.2",
+    "@web/test-runner-visual-regression": "^0.6.3",
     "babel-loader": "^8.2.2",
     "storybook": "^6.3.8"
   },
