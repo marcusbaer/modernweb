@@ -5,16 +5,25 @@
         <style>
             :root {
                 --unit: 8px;
+                --font-style: italic; 
+            }
+
+            happy-hippo::part(message) {
+                background-color: aquamarine;
+                color: darkgreen;
             }
         </style>
         <script type="module">
             import { render } from 'lit-html';
             import { css, html, LitElement } from 'lit-element';
             import { sum } from '../src/sum.js';
+            import HappyHippo from '../src/HappyHippo.js';
     
             console.log('Hello world!');
             console.log(sum(2, 3));
     
+            customElements.define(HappyHippo.tagName, HappyHippo);
+
             customElements.define('my-element', class extends LitElement {
                 static get properties() {
                     return {
@@ -49,12 +58,14 @@
                 }
             });
     
-            render(html` <p>Hello lit-html</p><my-element></my-element> `, document.body);
+            render(html` <p>Hello lit-html</p><my-element></my-element><happy-hippo name="Dingo"></happy-hippo> `, document.body);
         </script>
     </head>
 <body>
     <!-- https://modern-web.dev/docs/dev-server/overview/ -->
     Hello world!
+
+    <happy-hippo name="Dingo"></happy-hippo>
 </body>
 
 </html>

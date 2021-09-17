@@ -16,3 +16,13 @@ Guides, tools and libraries for modern web development.
 - https://modern-web.dev/docs/building/overview/
 - https://github.com/microsoft/playwright
 - https://open-wc.org/guides/
+
+
+## Web Component resources
+
+- https://terodox.tech/web-components-part-1
+- https://terodox.tech/web-components-part-2
+- https://terodox.tech/web-components-part-3
+- https://terodox.tech/web-components-part-4
+- https://terodox.tech/web-components-part-5
+- https://developer.mozilla.org/en-US/docs/Web/CSS/::part
