@@ -1,0 +1,24 @@
+{
+  "name": "learning-modernweb",
+  "version": "1.0.0",
+  "description": "Guides, tools and libraries for modern web development.",
+  "main": "index.js",
+  "scripts": {
+    "test": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --coverage",
+    "test:browserstack": "echo \"Browserstack testing has not yet been setup!\"",
+    "test:playwright": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --playwright --browsers chromium firefox webkit",
+    "test:puppeteer": "wtr \"test/**/*.test.{html,js}\" --node-resolve --puppeteer",
+    "test:puppeteer:watch": "wtr \"test/**/*.test.{html,js}\" --node-resolve --puppeteer --watch",
+    "test:watch": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@web/test-runner": "^0.13.17",
+    "@web/test-runner-browserstack": "^0.4.2",
+    "@web/test-runner-commands": "^0.5.12",
+    "@web/test-runner-playwright": "^0.8.8",
+    "@web/test-runner-puppeteer": "^0.10.2"
+  }
+}
