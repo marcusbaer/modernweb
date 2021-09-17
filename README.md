@@ -12,5 +12,6 @@ Guides, tools and libraries for modern web development.
 - Web Demystified, https://www.youtube.com/playlist?list=PLo3w8EB99pqLEopnunz-dOOBJ8t-Wgt2g
 - https://modern-web.dev/docs/test-runner/overview/
 - https://modern-web.dev/docs/test-runner/browser-launchers/browserstack/
+- https://modern-web.dev/docs/dev-server/overview/
 - https://github.com/microsoft/playwright
 - https://open-wc.org/guides/

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Demo</title>
+        <style>
+            :root {
+                --unit: 8px;
+            }
+        </style>
+        <script type="module">
+            import { render } from 'lit-html';
+            import { css, html, LitElement } from 'lit-element';
+            import { sum } from '../src/sum.js';
+    
+            console.log('Hello world!');
+            console.log(sum(2, 3));
+    
+            customElements.define('my-element', class extends LitElement {
+                static get properties() {
+                    return {
+                        count: { type: Number },
+                        name: { type: String }
+                    }
+                }
+    
+                constructor() {
+                    super();
+                    this.name = 'World';
+                    this.count = 0;
+                }
+                _onClick() {
+                    this.count += 1;
+                }
+                render() {
+                    return html`
+                      <div>
+                      <h1>Hello, ${this.name}!</h1>
+                      <button @click=${this._onClick}>
+                        Click Count: ${this.count}
+                      </button>
+                      <slot></slot>
+                    </div>
+                    `;
+                }
+                static get styles() {
+                    return css`
+                      div { border: 1px solid rebeccapurple; color: rebeccapurple; padding: var(--unit, 1rem) }
+                    `;
+                }
+            });
+    
+            render(html` <p>Hello lit-html</p><my-element></my-element> `, document.body);
+        </script>
+    </head>
+<body>
+    <!-- https://modern-web.dev/docs/dev-server/overview/ -->
+    Hello world!
+</body>
+
+</html>
