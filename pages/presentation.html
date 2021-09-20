@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Tests für Schnittstellen von Webkomponenten</title>
+    <style>
+        html { font-size: 20px; font-family: sans-serif; line-height: 150%; }
+    </style>
+</head>
+<body>
+    <h1>Unit Tests für Schnittstellen von Webkomponenten</h1>
+    <p>
+        Die Komponenten basierte Entwicklung wird immer bedeutender.
+        Unabhängig von der Technologieentscheidung, ob mit Vue, React oder als Webkomponenten,
+        bietet dieser Ansatz doch erhebliche Vorteile hinsichtlich Modularität und Skalierbarkeit.
+        Eine Komponente ist flexibel einsetzbar und lässt sich über ihre Eigenschaften an ihren jeweiligen Einsatzzweck anpassen.
+    </p>
+    <p>
+        Webkomponenten stechen dabei als von Renderingprozessen unabhängige Lösung hervor, die sich einfach mit anderen Frameworks 
+        kombinieren lässt. Neben ihrer Flexibilität bieten sie darüber hinaus mit dem Shadow DOM als einzige Technologie
+        eine echte Kapselung des Stylings.
+    </p>
+    <p>
+        Auch bei uns hat ihre Bedeutung für Projekte in den vergangenen Monaten erheblich zugenommen. Wir haben viel gelernt, sind aber noch nicht am Ende des Lernens angekommen.
+        Komponenten zu entwickeln, bedeutet, ihre Einsatzszenarien im Blick zu behalten und so auch ihre Kommunikationsfähigkeit zu beachten.
+        Darauf möchte ich heute einmal den Blick lenken und darauf, wie das möglicherweise mit Unit Tests sichergestellt werden kann.
+    </p>
+    <p>
+        Webkomponenten haben die Möglichkeit, auf verschiedene Weise angesprochen zu werden.
+    </p>
+    <ol>
+        <li>
+            <em>Attribute</em> bilden die klassische Schnittstelle für eine Kommunikation in Komponenten hinein.
+            Vor- und Nachteil zugleich ist dabei, dass dies, wie bei nativen HTML Elementen immer Zeichenketten oder boolsche Werte sind.
+            Im Vergleich zu typisierten Props bei Vue und React mag das als rückschrittlich erscheinen.
+            Als Framework unabhängige universale Komponenten bietet ihr Prinzip jedoch eine solide Lösung für eine Typzuweisung:
+            was auch immer intern damit getan wird, das Attribut wird stets als einfacher String übermittelt und muss
+            bei Bedarf validiert und umgewandelt werden.
+        </li>
+        <li>
+            <em>JS-Objekteigenschaften</em> ermöglichen es zusätzlich mit Komponenten direkt im JS-Kontext zu kommunizieren.
+            Wir sind es gewohnt, Eigenschaften von Objekten und DOM-Knoten mit JS abzufragen oder zu setzen und Funktionen auszuführen...
+        </li>
+    </ol>
+    <pre>
+        <code>
+            // im Inkognito-Modus mit Ansicht der DOM-Elemente
+
+            document.body.innerHTML = '&lt;h1>Hallo&lt;/h1>'
+            const h = document.querySelector('h1')
+            h.id = 'foo'
+            h.id
+            h.addEventListener('mouseover', console.log)
+        </code>
+    </pre>
+    <ol start="2">
+        <li>
+            ((Fortsetzung <em>JS-Objekteigenschaften</em>)) und auch bei Webkomponenten kann das die Kommunikation erleichtern.
+        </li>
+    </ol>
+    <pre>
+        <code>
+            document.body.innerHTML = '<happy-hippo></happy-hippo>'
+            customElements.define('happy-hippo', class extends HTMLElement {
+                constructor() {
+                    super();
+                    const node = document.createElement('p');
+                    node.innerHTML = 'I am <strong>strong enough</strong> to move that mountain.';
+                    this.shadow = this.attachShadow({mode: 'open'});
+                    this.shadow.appendChild(node);
+                }
+            });
+            const hippo = document.querySelector('happy-hippo')
+            hippo.id = 'happy'
+            hippo.name = 'Dingo'
+        </code>
+    </pre>
+    <ol start="3">
+        <li>
+            <em>CSS-Variablen</em>
+        </li>
+        <li>
+            <em>Parts</em>
+        </li>
+        <li>
+            <em>Slots?</em>
+        </li>
+        <li>
+            <em>Events</em> zur Kommunikation nach Außen
+        </li>
+    </ol>
+    <p>Wie kann man nun all diese Sachen testen?</p>
+    <p>...</p>
+    <p>
+        Aktuell sind wir noch nicht an dem Punkt, dass wir uns bei der Entwicklung von Webkomponenten intensiv,
+        oder wenigstens ausreichend, mit ihren jeweiligen Schnittstellen auseinandersetzen. Diesbezüglich sehe ich uns erst
+        am Anfang. Das ist sicher auch dem Umstand geschuldet, dass älteren Browsern in unseren Projekten noch immer
+        eine relativ hohe Bedeutung zukommt. Das aus einzelnen Komponenten entstehende Gesamtbild und die qualitative Absicherung
+        der Bedienbarkeit einer Website als Ganzes hat für uns zunächst Vorrang.
+    </p>
+    <p>
+        Haben wir Webkomponenten aber erst einmal richtig kennen- und einsetzen gelernt, halte ich die Qualitätssicherung
+        ihrer Schnittstellen mit Unit Tests für den nächsten logischen Schritt. Das vorgestellte Setup kann dabei eine Orientierung
+        und Diskussionsgrundlage dafür bieten, welche Werkzeuge hierbei zukünftig zum Einsatz kommen.
+    </p>
+</body>
+</html>
