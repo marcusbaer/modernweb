@@ -42,7 +42,7 @@
     <h2>Schnittstellen einer Webkomponente</h2>
     <p>
         Webkomponenten bilden, vor allem im Zusammenhang mit Shadow DOM, in sich geschlossene Einheiten,
-        die Styling und Layout, aber auch ihre eigene Logik beinhalten. Nichtsdestotrotz gibt es verschiedene
+        die Styling und Layout, aber auch ihre eigene Logik beinhalten. Dennoch gibt es verschiedene
         Möglichkeiten, um in sie hinein zu kommunizieren.
     </p>
     <ol>
@@ -94,23 +94,155 @@
     </pre>
     <ol start="3">
         <li>
-            <em>CSS-Variablen</em>
+            <em>CSS-Variablen</em> gelten im jeweiligen Scope und werden vererbt, auch an Custom Elements:
+            <code>happy-hippo { --font-style: italic; }</code> (es sind eben echte HTML-Elemente).
+            In der Webkomponente kann der Wert einer CSS-Variablen verwendet werden oder auf einen Default-Wert zurückgreifen:
+            <code>:host { font-style: var(--font-style, inherit); }</code>.
         </li>
         <li>
-            <em>Parts</em>
+            Als <em>Part</em> gekennzeichnete Knoten einer Webkomponente werden explizit für ein externes Styling freigegeben.
+            Mit dem <code>::part CSS-Pseudo-Element</code> können intern gesetzte Styles überschrieben werden:
+            <code>happy-hippo::part(message)</code>.
         </li>
         <li>
-            <em>Slots?</em>
+            Und was ist mit <em>Slots</em>? Sie bieten die Möglichkeit, externe Inhalte im Context einer Webkomponente zu plazieren.
+            Auch, wenn es fraglich wäre, sie als Schnittstelle zu Komponenten zu verstehen, sollte das Feature dennoch getestet werden,
+            sofern es von einer Komponente unterstützt wird.
         </li>
         <li>
-            <em>Events</em> zur Kommunikation nach Außen
+            Mit <em>Events</em> kommunizieren Webkomponenten nach Außen. Als eine Art Schnittstelle in die andere Richtung,
+            sollte ihr Vorhandensein sie mit Tests dokumentiert und abgesichert werden:
+            <code>document.querySelector('happy-hippo').addEventListener('mountain-moved', console.log)</code>.
         </li>
     </ol>
     <h2>Stack der Unit Tests</h2>
     <p>
-        ((Stack vorstellen.))
+        ((zeigen der package.json))
+    </p>
+    <p>
+        Der hier zum Einsatz kommende Stack basiert ausschließlich auf dem <code>@web/test-runner</code>.
+        Ist dieser installiert, kann er Tests ausführen und eine Statistik zur Testabdeckung generieren.
+        Abhängigkeiten von NPM Paketen kann er bei Bedarf auflösen.
+    </p>
+    <pre>
+        <code>
+            "test": "web-test-runner \"test/**/*.test.js\" --node-resolve --coverage"
+        </code>
+    </pre>
+    <p>
+        NPM Pakete zur Ausführung der Tests in anderen Browsern (z.B. <code>@web/test-runner-puppeteer</code>) ergänzen das Basispaket.
+        Mit dem von Microsoft stammenden <a href="https://github.com/microsoft/playwright">Playwright</a> können verschiedene Browser, wie Chromium, Firefox oder Webkit angesteuert werden.
+        Auch für die Integration von Browserstack gibt es ein Paket.
+    </p>
+    <p>
+        Das ebenfalls zusätzlich zu installierende NPM Paket <code>@web/test-runner-commands</code>
+        bietet Befehle, um z.B. die Browserseite zu kontrollieren oder auf das Dateisystem zugreifen zu können.
+        Es hilft beim Einstellen eines Viewports, der Emulation von Media-Queries oder dem Setup des User-Agents.
+        Auch eigene Befehle und Funktionen lassen sich implementieren.
     </p>
     <h2>Unit Tests für Webkomponenten</h2>
+    <p>
+        Nach der Installation aller gewünschten Pakete, kann ein erster Test erstellt und mit <code>npm test</code> ausgeführt werden.
+    </p>
+    <pre>
+        <code>
+            // test/join.test.js
+            import { expect } from '@esm-bundle/chai'
+
+            it('joins an array to a string', () => {
+                expect(['a', 'b'].join('-')).to.equal('a-b')
+                expect(['a', 'b'].join('')).to.equal('ab')
+            })
+        </code>
+    </pre>
+    <p>
+        Tests im DOM, wie sie für Webkomponenten erforderlich sind, können ebenfalls erstellt werden.
+        Hierzu kann ein Test in einer HTML-Datei angelegt werden.
+        Eine einfache, auf die Testfälle angepasste HTML-Struktur ist die Grundlage.
+        In einem <code>script</code>-Block werden dann die eigentlichen Tests geschrieben.
+    </p>
+    <pre>
+        <code>
+            // test/HappyHippo.test.html
+            &lt;!DOCTYPE html>
+            &lt;html>
+            &lt;head>
+                &lt;style>
+                    :root {
+                        --font-style: italic;
+                    }
+
+                    html {
+                        font-size: 16px;
+                    }
+
+                    happy-hippo::part(message) {
+                        background-color: green;
+                        color: blue;
+                    }
+                &lt;/style>
+            &lt;/head>
+
+            &lt;body>
+                &lt;happy-hippo name="Dingo">&lt;/happy-hippo>
+
+                &lt;script type="module">
+                    import { runTests } from '@web/test-runner-mocha';
+                    import { expect } from '@esm-bundle/chai';
+                    import { setViewport } from '@web/test-runner-commands';
+                    import { visualDiff } from '@web/test-runner-visual-regression';
+                    import HappyHippo from '../src/HappyHippo'
+
+                    let hippoNode;
+                    const TAGNAME = 'happy-hippo';
+                    customElements.define(HappyHippo.tagName, HappyHippo);
+
+                    runTests(() => {
+                        describe('HappyHippo Component API', () => {
+                            beforeEach(async () => {
+                                hippoNode = document.querySelector(TAGNAME);
+                            });
+                            it('has a tagName', async () => {
+                                expect(HappyHippo.tagName).to.equal(TAGNAME);
+                            });
+                            it('defines observedAttributes', async () => {
+                                expect(HappyHippo.observedAttributes).to.equal(['name']);
+                            });
+                            it('has a getter for name', async () => {
+                                expect(hippoNode.name).to.equal('Dingo');
+                            });
+                            it('updates a name by setter', async () => {
+                                hippoNode.name = 'Cangaroo';
+                                expect(hippoNode.name).to.equal('Cangaroo');
+                            });
+                            it('updates a name by attribute', async () => {
+                                hippoNode.setAttribute('name', 'Cangaroo');
+                                expect(hippoNode.name).to.equal('Cangaroo');
+                            });
+                            it('uses font style from --font-style over cascade', async () => {
+                                const fontStyle = getComputedStyle(hippoNode).fontStyle;
+                                expect(fontStyle).to.equal('italic');
+                            });
+                            it('uses font size from cascade', async () => {
+                                const fontSize = getComputedStyle(hippoNode).fontSize;
+                                expect(fontSize).to.equal('16px');
+                            });
+                            it('has basic host styles', async () => {
+                                const display = getComputedStyle(hippoNode).display;
+                                expect(display).to.equal('inline-block');
+                                const border = getComputedStyle(hippoNode).border;
+                                expect(border).to.equal('1px solid rgb(128, 128, 128)');
+                            });
+                            it('allows styling a part message', async () => {
+                                await visualDiff(hippoNode, 'happy-hippo');
+                            });
+                        })
+                    });
+                &lt;/script>
+            &lt;/body>
+            &lt;/html>
+        </code>
+    </pre>
     <p>
         Wie kann man nun all diese Sachen testen?
         ((Beispiele für Attribute, Javascript-Objekt-Eigenschaften, observedAttributes, CSS-Variablen, Parts, Slots und Events demonstrieren. Schrittweise Tests für das Beispiel schreiben.))
