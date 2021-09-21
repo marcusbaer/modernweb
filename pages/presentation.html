@@ -6,13 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unit Tests für Schnittstellen von Webkomponenten</title>
     <style>
-        html { font-size: 20px; font-family: sans-serif; line-height: 150%; }
+        html { font-size: 20px; font-family: sans-serif; padding: 8px;}
+        ol, p, pre, ul { line-height: 150%; }
+        li { padding: 8px 0; }
     </style>
 </head>
 <body>
     <h1>Unit Tests für Schnittstellen von Webkomponenten</h1>
     <p>
-        Die Komponenten basierte Entwicklung wird immer bedeutender.
+        Die Entwicklung von Commerce-Umgebungen und anderen Webseiten basiert immer häufiger auf einem von Komponenten gestützten Entwicklungsansatz.
         Unabhängig von der Technologieentscheidung, ob mit Vue, React oder als Webkomponenten,
         bietet dieser Ansatz doch erhebliche Vorteile hinsichtlich Modularität und Skalierbarkeit.
         Eine Komponente ist flexibel einsetzbar und lässt sich über ihre Eigenschaften an ihren jeweiligen Einsatzzweck anpassen.
@@ -28,20 +30,33 @@
         Darauf möchte ich heute einmal den Blick lenken und darauf, wie das möglicherweise mit Unit Tests sichergestellt werden kann.
     </p>
     <p>
-        Webkomponenten haben die Möglichkeit, auf verschiedene Weise angesprochen zu werden.
+        Die Initiative "<a href="https://modern-web.dev/">Modern Web</a>" zeigt ein interessantes und einfach bereitzustellendes Setup
+        für Projekte auf. Nicht alles davon wird auf unsere Projekte anwendbar sein, etwa Rollup anstatt Webpack
+        oder Web Dev Server anstelle unseres lokalen Servers. Auch die angepasste Variante von Storybook wird bei uns
+        vermutlich nicht zum Einsatz kommen. Dennoch lassen sich auf Basis dieses Stacks hervorragend Unit Tests
+        für unterschiedliche Browser erstellen und damit auch Tests für die Schnittstellen von Webkomponenten.
+    </p>
+    <p>
+        Das werden wir uns gleich einmal etwas genauer ansehen.
+    </p>
+    <h2>Schnittstellen einer Webkomponente</h2>
+    <p>
+        Webkomponenten bilden, vor allem im Zusammenhang mit Shadow DOM, in sich geschlossene Einheiten,
+        die Styling und Layout, aber auch ihre eigene Logik beinhalten. Nichtsdestotrotz gibt es verschiedene
+        Möglichkeiten, um in sie hinein zu kommunizieren.
     </p>
     <ol>
         <li>
             <em>Attribute</em> bilden die klassische Schnittstelle für eine Kommunikation in Komponenten hinein.
-            Vor- und Nachteil zugleich ist dabei, dass dies, wie bei nativen HTML Elementen immer Zeichenketten oder boolsche Werte sind.
+            Vor- und Nachteil zugleich ist dabei, dass dies, wie bei nativen HTML-Elementen immer Zeichenketten oder boolsche Werte sind.
             Im Vergleich zu typisierten Props bei Vue und React mag das als rückschrittlich erscheinen.
             Als Framework unabhängige universale Komponenten bietet ihr Prinzip jedoch eine solide Lösung für eine Typzuweisung:
             was auch immer intern damit getan wird, das Attribut wird stets als einfacher String übermittelt und muss
             bei Bedarf validiert und umgewandelt werden.
         </li>
         <li>
-            <em>JS-Objekteigenschaften</em> ermöglichen es zusätzlich mit Komponenten direkt im JS-Kontext zu kommunizieren.
-            Wir sind es gewohnt, Eigenschaften von Objekten und DOM-Knoten mit JS abzufragen oder zu setzen und Funktionen auszuführen...
+            <em>Javascript-Objekt-Eigenschaften</em> ermöglichen es zusätzlich mit Komponenten direkt im Javascript-Kontext zu kommunizieren.
+            Wir sind es gewohnt, Eigenschaften von Objekten und DOM-Knoten mit Javascript abzufragen oder zu setzen und Funktionen auszuführen...
         </li>
     </ol>
     <pre>
@@ -53,6 +68,9 @@
             h.id = 'foo'
             h.id
             h.addEventListener('mouseover', console.log)
+
+            document.body.innerHTML = '&lt;textarea>Hallo&lt;/textarea>'
+            document.querySelector('textarea').value
         </code>
     </pre>
     <ol start="2">
@@ -62,19 +80,16 @@
     </ol>
     <pre>
         <code>
-            document.body.innerHTML = '<happy-hippo></happy-hippo>'
+            document.body.innerHTML = '&lt;happy-hippo>&lt;/happy-hippo>&lt;br>&lt;textarea>Hallo&lt;/textarea>'
             customElements.define('happy-hippo', class extends HTMLElement {
                 constructor() {
                     super();
-                    const node = document.createElement('p');
-                    node.innerHTML = 'I am <strong>strong enough</strong> to move that mountain.';
                     this.shadow = this.attachShadow({mode: 'open'});
-                    this.shadow.appendChild(node);
+                    this.shadow.innerHTML = '&lt;p>I am &lt;strong>strong enough&lt;/strong> to move that mountain.&lt;/p>';
                 }
             });
-            const hippo = document.querySelector('happy-hippo')
-            hippo.id = 'happy'
-            hippo.name = 'Dingo'
+            document.querySelector('happy-hippo').id = 'happy'
+            document.querySelector('happy-hippo').name = 'Dingo'
         </code>
     </pre>
     <ol start="3">
@@ -91,8 +106,17 @@
             <em>Events</em> zur Kommunikation nach Außen
         </li>
     </ol>
-    <p>Wie kann man nun all diese Sachen testen?</p>
+    <h2>Stack der Unit Tests</h2>
+    <p>
+        ((Stack vorstellen.))
+    </p>
+    <h2>Unit Tests für Webkomponenten</h2>
+    <p>
+        Wie kann man nun all diese Sachen testen?
+        ((Beispiele für Attribute, Javascript-Objekt-Eigenschaften, observedAttributes, CSS-Variablen, Parts, Slots und Events demonstrieren. Schrittweise Tests für das Beispiel schreiben.))
+    </p>
     <p>...</p>
+    <h2>Schluss</h2>
     <p>
         Aktuell sind wir noch nicht an dem Punkt, dass wir uns bei der Entwicklung von Webkomponenten intensiv,
         oder wenigstens ausreichend, mit ihren jeweiligen Schnittstellen auseinandersetzen. Diesbezüglich sehe ich uns erst
