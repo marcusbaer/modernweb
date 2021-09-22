@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
+    "dev": "concurrently \"npm run start:dev\" \"npm run storybook\"",
     "start": "web-dev-server --open /pages/ --node-resolve",
     "start:dev": "web-dev-server --watch --open /pages/ --node-resolve",
     "test": "web-test-runner \"test/**/*.test.{html,js}\" --node-resolve --coverage",
@@ -36,6 +37,7 @@
     "@web/test-runner-puppeteer": "^0.10.2",
     "@web/test-runner-visual-regression": "^0.6.3",
     "babel-loader": "^8.2.2",
+    "concurrently": "^6.2.1",
     "storybook": "^6.3.8"
   },
   "dependencies": {

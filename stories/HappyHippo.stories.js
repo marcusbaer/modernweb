@@ -20,19 +20,21 @@ const HappyHippoTemplate = ({
   backgroundColor = 'white',
   color = 'black',
   fontStyle = 'normal',
-  name
+  name,
+  slot
 }) => {
   return `
       <style>
       happy-hippo { --font-style: ${fontStyle}; }
       happy-hippo::part(message) { background-color: ${backgroundColor}; color: ${color}; }
       </style>
-      <happy-hippo name="${name}"></happy-hippo>
+      <happy-hippo name="${name}">${slot}</happy-hippo>
     `
 }
 
 export const HappyHippo = HappyHippoTemplate.bind({})
 HappyHippo.args = {
   name: '',
-  fontStyle: 'normal'
+  fontStyle: 'normal',
+  slot: ''
 }

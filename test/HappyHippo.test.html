@@ -48,6 +48,7 @@
                 });
                 it('shows slot content at the right place', async () => {
                     expect(hippoNode.textContent).to.contain('Are you fine');
+                    expect(hippoNode.textContent).to.exist;
                 });
                 it('dispatches custom event mountain-moved', async () => {
                     hippoNode.addEventListener('mountain-moved', (event) => {

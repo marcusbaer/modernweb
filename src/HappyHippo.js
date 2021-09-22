@@ -12,7 +12,8 @@ export default class HappyHippo extends HTMLElement {
     // this.appendChild(node);
     this.shadow = this.attachShadow({ mode: 'open' })
     this.shadow.innerHTML = `<style>:host { border: 1px solid gray; display: inline-block; color: orange; font-style: var(--font-style, inherit); }
-    p { margin: 0; padding: 1rem; }</style>
+    p { margin: 0; padding: 1rem; }
+    ::slotted(div), ::slotted(h1), ::slotted(h2), ::slotted(h3), ::slotted(h4), ::slotted(p) { padding: 0 1rem; }</style>
     <p part="message">I am <strong>strong enough</strong> to move that mountain</p>`
 
     const name = this.getAttribute('name')
