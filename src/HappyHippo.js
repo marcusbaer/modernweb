@@ -4,14 +4,14 @@ export default class HappyHippo extends HTMLElement {
   }
 
   static get observedAttributes () {
-    return ['name']
+    return ['moved', 'name']
   }
 
   constructor () {
     super()
     // this.appendChild(node);
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.shadow.innerHTML = `<style>:host { border: 1px solid gray; display: inline-block; font-style: var(--font-style, inherit); }
+    this.shadow.innerHTML = `<style>:host { border: 1px solid gray; display: inline-block; color: orange; font-style: var(--font-style, inherit); }
     p { margin: 0; padding: 1rem; }</style>
     <p part="message">I am <strong>strong enough</strong> to move that mountain</p>`
 
@@ -22,8 +22,11 @@ export default class HappyHippo extends HTMLElement {
 
   attributeChangedCallback (name, oldVal, newVal) {
     // this[name] = newVal
-    // we only have attribute 'name'
-    this.closingNode.textContent = newVal ? `, ${newVal}.` : '.'
+    if (name === 'name') {
+      this.closingNode.textContent = newVal ? `, ${newVal}.` : '.'
+    } else {
+      this.dispatchEvent(new CustomEvent('mountain-moved'));
+    }
   }
 
   get name () {

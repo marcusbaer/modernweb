@@ -22,6 +22,12 @@
         console.log(sum(2, 3));
 
         customElements.define(HappyHippo.tagName, HappyHippo);
+
+        const hippoNode = document.querySelector('happy-hippo');
+        hippoNode.addEventListener('mountain-moved', (event) => {
+            console.log(event);
+        });
+        // hippoNode.setAttribute('moved', true);
     </script>
 </head>
 

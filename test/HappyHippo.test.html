@@ -20,7 +20,9 @@
 </head>
 
 <body>
-    <happy-hippo name="Dingo"></happy-hippo>
+    <happy-hippo name="Dingo">
+        <p>Are you fine with that?</p>
+    </happy-hippo>
 
     <script type="module">
         import { runTests } from '@web/test-runner-mocha';
@@ -40,6 +42,18 @@
                 });
                 it('has a tagName', async () => {
                     expect(HappyHippo.tagName).to.equal(TAGNAME);
+                });
+                it('defines observedAttributes', async () => {
+                    expect(HappyHippo.observedAttributes).to.have.deep.members(['moved', 'name']);
+                });
+                it('shows slot content at the right place', async () => {
+                    expect(hippoNode.textContent).to.contain('Are you fine');
+                });
+                it('dispatches custom event mountain-moved', async () => {
+                    hippoNode.addEventListener('mountain-moved', (event) => {
+                        expect(event.type).to.equal('mountain-moved');
+                    });
+                    hippoNode.setAttribute('moved', true);
                 });
                 it('has a getter for name', async () => {
                     expect(hippoNode.name).to.equal('Dingo');
@@ -63,8 +77,12 @@
                 it('has basic host styles', async () => {
                     const display = getComputedStyle(hippoNode).display;
                     expect(display).to.equal('inline-block');
-                    const border = getComputedStyle(hippoNode).border;
-                    expect(border).to.equal('1px solid rgb(128, 128, 128)');
+                    const color = getComputedStyle(hippoNode).color;
+                    expect(color).to.equal('rgb(255, 165, 0)');
+                    if (navigator.userAgent.indexOf('Firefox') === -1) {
+                        const border = getComputedStyle(hippoNode).border;
+                        expect(border).to.equal('1px solid rgb(128, 128, 128)');
+                    }
                 });
                 it('allows styling a part message', async () => {
                     await visualDiff(hippoNode, 'happy-hippo');
